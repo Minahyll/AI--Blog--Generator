@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Listblog = () => {
+const ListBlog = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const Listblog = () => {
   );
 }
 
-export default Listblog;
+export default ListBlog;
