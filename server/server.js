@@ -3,18 +3,19 @@ import mongoose from 'mongoose';
 import 'dotenv/config'
 import cors from 'cors'
 import connectDB from './configs/db.js';
+import { adminLogin } from './controllers/adminController.js';
 
 
 const app = express();
 await connectDB()
 
 //Middlewares
-app.use(cors())
+app.use(cors()) 
 app.use(express.json())
-
 //Routes
 app.get('/', (req,res) => 
      res.send("API is Working"))
+app.use('/api/admin',adminLogin)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,()=>{
