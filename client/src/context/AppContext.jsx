@@ -1,5 +1,4 @@
 import { useContext,createContext, useState, useEffect } from 'react';
-import { Children} from 'react'
 import axios from "axios";
 import {useNavigate} from 'react-router-dom'
 import toast from 'react-hot-toast';
@@ -12,7 +11,7 @@ export const AppProvider = ({children})=>{
 
     const navigate = useNavigate()
 
-    const [token, setToken]= useState(null)
+    const [token, setToken]= useState(localStorage.getItem('token') || null);
     const [blogs, setBlogs]= useState([])
     const [input, setInput]= useState("")
     const fetchBlogs = async ()=>{
@@ -25,10 +24,10 @@ export const AppProvider = ({children})=>{
     }
     useEffect(()=>{
     fetchBlogs();
-    const token = localStorage.getItem('token')
-    if(token){
-        setToken(token);
-        axios.defaults.headers.common['Authorization'] = `${token}`;
+    const savedToken = localStorage.getItem('token')
+    if(savedToken){
+        setToken(savedToken);
+        axios.defaults.headers.common['Authorization'] = `${savedToken}`; 
     }
     },[]) 
     const value={
@@ -42,4 +41,4 @@ export const AppProvider = ({children})=>{
 }
 export const useAppContext = ()=>{
     return useContext(AppContext)
-};
+}; 
