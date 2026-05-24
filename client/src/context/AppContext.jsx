@@ -1,4 +1,5 @@
-import { createContext, useContext } from 'react'
+
+import { createContext, useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
 import toast from 'react-hot-toast';
@@ -25,10 +26,10 @@ export const AppProvider = ({ children}) =>{
 }
 useEffect(()=>{
     fetchBlogs();
-    const token = localAtorage.getItem('token')
-    if(token){
-        setToken(token);
-        axios.defaults.headers.common['Authorization'] = `${token}`;
+    const storedToken = localStorage.getItem('token')
+    if(storedToken){
+        setToken(storedToken);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
     }
 },[])
 
@@ -36,7 +37,7 @@ useEffect(()=>{
         axios, navigate, token, setToken, blogs, setBlogs, input, setInput
     }
     return(
-        <AppContext.Provider value={}>
+        <AppContext.Provider value={value}>
             {children}
         </AppContext.Provider>
     )
