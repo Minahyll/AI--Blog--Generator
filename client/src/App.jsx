@@ -18,6 +18,7 @@ const App = ()=>{
   return (
     <div>
       <Toaster/>
+      
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/blog/:id' element={<Blog/>} />

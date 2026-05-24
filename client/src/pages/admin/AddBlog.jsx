@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { assets, blogCategories } from '../../assets/assets';
 import Quill from 'quill';
-
+import { useAppContext } from '../../context/AppContext';
+import toast from 'react-hot-toast';
+import {parse} from 'marked'
 // added const
-const AddBlog = () => {
+const AddBlog = () => { 
+  const {axios} = useAppContext()
+  const [isAdding, setIsAdding] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   const editorRef = useRef(null)
   const quillRef = useRef(null)
   
@@ -14,11 +20,56 @@ const AddBlog = () => {
       const[isPublished, setIsPublished]=useState(false);
 
       const generateContent = async ()=>{
-
+    if (!title) return toast.error('Please enter a title')
+      try {
+     setLoading(true);
+     const {data} = await axios.post('/api/blog/generate', {prompt: title})
+     if (data.success){
+       quillRef.current.root.innerHTML = parse(data.content)
+     }else{
+      toast.error(data.message)
+     }
+      } catch(error) {
+      toast.error(error.message)
+      }finally{
+        setLoading(false)
+      }
       }
 
-      const onSubmitHandler =async(e)=>{
-        e.preventDefault();
+      const onSubmitHandler =async(e)=>{ 
+        try {
+      e.preventDefault();
+      setIsAdding(true)
+      const blog = {
+        title, subTitle, 
+         description : quillRef.current.root.innerHTML,category,isPublished
+      }    
+      const formData = new FormData();
+      formData.append('blog', JSON.stringify(blog))
+      formData.append('image', image)
+      const token = localStorage.getItem("token");
+      const {data} = await axios.post('/api/blog/add', formData,
+       {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  }
+);
+      if (data.success){
+        toast.success(data.message)
+        setImage(null)
+      setTitle('')
+      quillRef.current.root.innerHTML = ''
+      setCategory('Startup')
+      }else{
+        toast.error(data.message)
+      }
+        } catch(error) {
+       toast.error(error.message)
+        }finally{
+          setIsAdding(false)
+        }
+        
       }
      
       // added useEffect
@@ -54,7 +105,7 @@ onChange={e=> setSubTitle(e.target.value)} value={subTitle} />
   {/* added div */}
   <div ref={editorRef}></div>
 
-  <button type='button' onClick={generateContent} className='absolute
+  <button disabled={loading} type='button' onClick={generateContent} className='absolute
   bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5
   rounded hover:underline cursor-pointer' >Generate with AI </button>
 </div>
@@ -68,12 +119,12 @@ border-gray-300 outline-none rounded'>
 </select>
 <div className='flex gap-2 mt-4'>
   <p>Published Now</p>
-  <input type="checkbox" checked={isPublished}  className='scale-125cursor-pointer'
+  <input type="checkbox" checked={isPublished}  className='scale-125 cursor-pointer'
   onChange={e=> setIsPublished(e.target.checked)}/>
 </div>
-<button type="submit" className='mt-8 w-40 h-10 bg-primary
+<button disabled={isAdding} type="submit" className='mt-8 w-40 h-10 bg-primary
 text-white rounded cursor-pointer text-sm'>
-  AddBlog
+  {isAdding ? 'Adding...' : 'Add Blog'}
 </button>
 
       </div>
