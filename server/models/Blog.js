@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
 
 const blogSchema = new mongoose.Schema({
-    title: {type: String, requires: true},
+    title: {type: String, required: true},
     subTitle: {type: String},
-    description: {type: String, requires: true},
-    category: {type: String, requires: true},
-    image: {type: String, requires: true},
-    isPublished: {type: Boolean, requires: true},
+    description: {type: String, required: true},
+    category: {type: String, required: true},
+    image: {type: String, required: true},
+    isPublished: {type: Boolean, required: true},
 
 
 } ,{timestamps: true});
 
-const Blog = mongoose.model('blog',blogSchema);
+const Blog = mongoose.model('Blog',blogSchema);
 
 export default Blog;

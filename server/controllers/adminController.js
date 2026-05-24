@@ -20,7 +20,7 @@ export const adminLogin = async(req ,res)=>{
    
 export const getAllBlogsAdmin = async(req, res) =>{
     try{
-        const blogs = (await Blog.find({})).sort({createdAt:-1});
+        const blogs = await Blog.find({}).sort({createdAt:-1});
         res.json({success: true,blogs})
     } catch (error){
         res.json({success: false, message: error.message})
@@ -30,7 +30,7 @@ export const getAllBlogsAdmin = async(req, res) =>{
 
 export const getAllComments = async(req, res)=>{
     try{
-        const comments = await Comment.find ({}).popular("blog").sort({createdAt:-1})
+        const comments = await Comment.find ({}).populate("blog").sort({createdAt:-1})
           res.json({success: true,comments})
     }catch (error){
         res.json({success: false, message: error.message})
@@ -45,7 +45,7 @@ export const getDashboard = async(req, res)=>{
         const drafts = await Blog.countDocuments({isPublished: false})
 
         const dashboardData ={
-            blogs, comments, rafts, recentBlogs
+            blogs, comments, drafts, recentBlogs
         }
 
           res.json({success: true,dashboardData})
@@ -55,7 +55,8 @@ export const getDashboard = async(req, res)=>{
 }
 
 export const deleteCommentsById = async(req, res)=>{
-    try{
+    try{ 
+        console.log("DELETE COMMENT BODY:", req.body);
         const{id}  = req.body
         await Comment.findByIdAndDelete(id);
         res.json({success: true,message:"Comment deleted successfully"})
@@ -65,7 +66,8 @@ export const deleteCommentsById = async(req, res)=>{
 }
 
 export const approvedCommentsById = async(req, res)=>{
-    try{
+    try{ 
+        console.log("APPROVE COMMENT BODY:", req.body);
         const{id}  = req.body
         await Comment.findByIdAndUpdate(id, {isApproved: true});
         res.json({success: true,message:"Comment approved successfully"})
