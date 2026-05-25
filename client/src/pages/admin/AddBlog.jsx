@@ -104,8 +104,14 @@ onChange={e=> setSubTitle(e.target.value)} value={subTitle} />
 <div className='max-w-lg h-74 pb-16 sm:pb-10 pt-2 relative'>
   {/* added div */}
   <div ref={editorRef}></div>
+{loading && (
+  <div className='absolute right-0 top-0 bottom-0 left-0 flex item-center justify-center bg-black/10 mt-2'>
+    <div className='w-8 h-8 rounded full boarder-2 boarder-t-white animate-spin'></div>
 
-  <button disabled={loading} type='button' onClick={generateContent} className='absolute
+</div>)}
+ 
+ 
+ <button disabled={loading} type='button' onClick={generateContent} className='absolute
   bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5
   rounded hover:underline cursor-pointer' >Generate with AI </button>
 </div>
