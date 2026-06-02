@@ -5,6 +5,7 @@ import cors from 'cors'
 import connectDB from './configs/db.js';
 import blogRouter from './routes/blogRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
+import plagiarismRoutes from "./routes/plagiarismRoutes.js";
 
 const app = express();
 await connectDB()
@@ -22,9 +23,11 @@ app.get('/', (req,res) =>
      res.send("API is Working"))
 app.use('/api/admin', adminRouter);
 app.use('/api/blog',blogRouter)
+app.use("/api/plagiarism", plagiarismRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`)
 })
 export default app;
+
