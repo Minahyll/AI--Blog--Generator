@@ -12,6 +12,7 @@ import Login from './components/Admin/Login'
 import 'quill/dist/quill.snow.css'
 import { Toaster } from "react-hot-toast";
 import { useAppContext } from "./context/AppContext";
+import PlagiarismChecker from "./components/PlagiarismChecker";
 
 const App = ()=>{
   const {token} = useAppContext()
@@ -32,4 +33,13 @@ const App = ()=>{
     </div>
   )
 }
+
+// // palagirism code
+// function App() {
+//   return (
+//     <div>
+//       <PlagiarismChecker />
+//     </div>
+//   );
+// }
 export default App;

@@ -4,6 +4,7 @@ import Quill from 'quill';
 import { useAppContext } from '../../context/AppContext';
 import toast from 'react-hot-toast';
 import {parse} from 'marked'
+import PlagiarismChecker from "../../components/PlagiarismChecker";
 // added const
 const AddBlog = () => { 
   const {axios} = useAppContext()
@@ -132,10 +133,13 @@ border-gray-300 outline-none rounded'>
 text-white rounded cursor-pointer text-sm'>
   {isAdding ? 'Adding...' : 'Add Blog'}
 </button>
-
+{/* plagiarism checker box */}
+<PlagiarismChecker />
       </div>
     </form>
   );
 }
+
+
 
 export default AddBlog;
