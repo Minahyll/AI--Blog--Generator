@@ -3,7 +3,7 @@ import { assets, footer_data } from '../assets/assets'
 
 const Footer = () => {
   return (
-    <div className='px-6 md:px-16 lg:px-24 xl:px-32 bg-primary'>
+    <div className='px-6 md:px-16 lg:px-24 xl:px-32 bg-blue'>
       <div className='flex flex-col md:flex-row items-start justify-between 
       gap-6 py-6 border-b border-gray-800 text-gray-500'>
         <div>
