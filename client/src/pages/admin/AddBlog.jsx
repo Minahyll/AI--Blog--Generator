@@ -24,7 +24,15 @@ const AddBlog = () => {
     if (!title) return toast.error('Please enter a title')
       try {
      setLoading(true);
-     const {data} = await axios.post('/api/blog/generate', {prompt: title})
+      const token = localStorage.getItem("token"); 
+     const {data} = await axios.post('/api/blog/generate', {prompt: title},
+      {
+        headers: {
+          authorization: `Bearer ${token}` // ← add this
+        }
+      }
+     )
+
      if (data.success){
        quillRef.current.root.innerHTML = parse(data.content)
      }else{
@@ -105,11 +113,17 @@ onChange={e=> setSubTitle(e.target.value)} value={subTitle} />
 <div className='max-w-lg h-74 pb-16 sm:pb-10 pt-2 relative'>
   {/* added div */}
   <div ref={editorRef}></div>
-{loading && (
-  <div className='absolute right-0 top-0 bottom-0 left-0 flex item-center justify-center bg-black/10 mt-2'>
-    <div className='w-8 h-8 rounded full boarder-2 boarder-t-white animate-spin'></div>
+{/* {loading && (
+  <div className='absolute right-0 top-0 bottom-0 left-0 flex item-center justify-center bg-black/10 inset-0'>
+    <div className='w-8 h-8 rounded-full border-2 border-t-white animate-spin'></div>
 
-</div>)}
+</div>)} */}
+
+{loading && (
+  <div style={{position:'absolute', top:0, left:0, right:0, bottom:0, display:'flex', alignItems:'center', justifyContent:'center', background:'rgba(0,0,0,0.1)', zIndex:10}}>
+    <div style={{width:'32px', height:'32px', borderRadius:'50%', border:'3px solid #ccc', borderTop:'3px solid #000', animation:'spin 1s linear infinite'}}></div>
+  </div>
+)}
  
  
  <button disabled={loading} type='button' onClick={generateContent} className='absolute
